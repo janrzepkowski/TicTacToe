@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 const app = express();
 const api_key = process.env.REACT_APP_API_KEY;
 const api_secret = process.env.REACT_APP_API_SECRET;
-const serverClient = new StreamChat.getInstance(api_key, api_secret);
+const serverClient = StreamChat.getInstance(api_key, api_secret);
 
 app.use(cors());
 app.use(express.json());
@@ -19,7 +19,7 @@ app.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const token = serverClient.createToken(userID);
-    res.json({ token, firstName, lastName, username, hashedPassword });
+    res.json({ token, userID, firstName, lastName, username, hashedPassword });
   } catch (error) {
     console.error(error);
     res.json({ error: "Something went wrong" });
