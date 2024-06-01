@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 
 const app = express();
-const api_key = process.env.REACT_APP_API_KEY;
-const api_secret = process.env.REACT_APP_API_SECRET;
+const api_key = "process.env.REACT_APP_API_KEY";
+const api_secret = "process.env.REACT_APP_API_SECRET";
 const serverClient = StreamChat.getInstance(api_key, api_secret);
 
 app.use(cors());
@@ -33,6 +33,6 @@ app.post("/login", async (req, res) => {
   res.status(200).json({ token, username });
 });
 
-app.listen(3001, () => {
-  console.log("Server is running on port 3001");
+app.listen(5174, () => {
+  console.log("Server is running on port 5174");
 });
