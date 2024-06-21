@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TicTacToe from "./TicTacToe";
 
-function Game({ channel }) {
+function Game({ channel, opponentName }) {
   const [playersJoined, setPlayersJoined] = useState(
     channel.state.watcher_count === 2
   );
 
-  channel.on("user.watching.start", (e) => {
-    setPlayersJoined(e.watcher_count === 2);
-  });
+  useEffect(() => {
+    const handleUserWatchingStart = (e) => {
+      setPlayersJoined(e.watcher_count === 2);
+    };
+
+    channel.on("user.watching.start", handleUserWatchingStart);
+    
+    return () => {
+      channel.off("user.watching.start", handleUserWatchingStart);
+    };
+  }, [channel]);
 
   if (!playersJoined) {
-    return <div>Waiting for other player to join...</div>;
+    return <div>Waiting for {opponentName} to join...</div>;
   }
 
   return (
