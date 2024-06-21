@@ -37,7 +37,7 @@ function checkWinner(tiles, setStrikeClass) {
   return State.inProgress;
 }
 
-function TicTacToe() {
+function TicTacToe({ channel }) {
   const [startingPlayer, setStartingPlayer] = useState(PLAYER_X);
   const [tiles, setTiles] = useState(Array(9).fill(null));
   const [player, setPlayer] = useState(startingPlayer);
@@ -49,7 +49,20 @@ function TicTacToe() {
     setGameState(result);
   }, [tiles]);
 
-  const handleTileClick = (index) => {
+  useEffect(() => {
+    const handleMessage = (event) => {
+      const { tiles, player, gameState, strikeClass } = event.message.data;
+      setTiles(tiles);
+      setPlayer(player);
+      setGameState(gameState);
+      setStrikeClass(strikeClass);
+    };
+
+    channel.on("message.new", handleMessage);
+    return () => channel.off("message.new", handleMessage);
+  }, [channel]);
+
+  const handleTileClick = async (index) => {
     if (tiles[index] !== null || gameState !== State.inProgress) {
       return;
     }
@@ -57,24 +70,43 @@ function TicTacToe() {
     const newTiles = [...tiles];
     newTiles[index] = player;
     setTiles(newTiles);
-    if (player === PLAYER_X) {
-      setPlayer(PLAYER_O);
-    } else {
-      setPlayer(PLAYER_X);
-    }
+
+    const nextPlayer = player === PLAYER_X ? PLAYER_O : PLAYER_X;
+    setPlayer(nextPlayer);
+
+    const result = checkWinner(newTiles, setStrikeClass);
+    setGameState(result);
+
+    await channel.sendMessage({
+      text: "update",
+      data: {
+        tiles: newTiles,
+        player: nextPlayer,
+        gameState: result,
+        strikeClass: result !== State.inProgress ? strikeClass : "",
+      },
+    });
   };
 
-  const handleReset = () => {
-    setTiles(Array(9).fill(null));
+  const handleReset = async () => {
+    const newTiles = Array(9).fill(null);
+    const newPlayer = startingPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
+
+    setTiles(newTiles);
     setStrikeClass("");
     setGameState(State.inProgress);
-    if (startingPlayer === PLAYER_X) {
-      setStartingPlayer(PLAYER_O);
-      setPlayer(PLAYER_O);
-    } else {
-      setStartingPlayer(PLAYER_X);
-      setPlayer(PLAYER_X);
-    }
+    setStartingPlayer(newPlayer);
+    setPlayer(newPlayer);
+
+    await channel.sendMessage({
+      text: "reset",
+      data: {
+        tiles: newTiles,
+        player: newPlayer,
+        gameState: State.inProgress,
+        strikeClass: "",
+      },
+    });
   };
 
   return (
