@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import TicTacToe from "./TicTacToe";
 
 function Game({ channel }) {
   const [playersJoined, setPlayersJoined] = useState(
@@ -13,7 +14,9 @@ function Game({ channel }) {
     return <div>Waiting for other player to join...</div>;
   }
 
-  return <div>Game</div>;
+  return <div>
+    <TicTacToe />
+  </div>;
 }
 
 export default Game;
