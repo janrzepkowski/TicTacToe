@@ -3,6 +3,7 @@ import Board from "./Board";
 import Result from "./Result";
 import State from "./GameState";
 import Reset from "./Reset";
+import Cookies from "universal-cookie";
 
 const PLAYER_X = "X";
 const PLAYER_O = "O";
@@ -38,6 +39,7 @@ function checkWinner(tiles, setStrikeClass) {
 }
 
 function TicTacToe({ channel }) {
+  const cookies = new Cookies();
   const [startingPlayer, setStartingPlayer] = useState(PLAYER_X);
   const [tiles, setTiles] = useState(Array(9).fill(null));
   const [player, setPlayer] = useState(startingPlayer);
@@ -63,7 +65,7 @@ function TicTacToe({ channel }) {
   }, [channel]);
 
   const handleTileClick = async (index) => {
-    if (tiles[index] !== null || gameState !== State.inProgress) {
+    if (tiles[index] !== null || gameState !== State.inProgress || !isMyTurn()) {
       return;
     }
 
@@ -107,6 +109,17 @@ function TicTacToe({ channel }) {
         strikeClass: "",
       },
     });
+  };
+
+  const isMyTurn = () => {
+    const userID = cookies.get("userID");
+    const members = channel.state.members;
+    const memberIDs = Object.keys(members);
+    if (memberIDs.length === 2) {
+      const myPlayerRole = memberIDs[0] === userID ? PLAYER_X : PLAYER_O;
+      return player === myPlayerRole;
+    }
+    return false;
   };
 
   return (
