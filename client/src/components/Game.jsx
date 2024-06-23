@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TicTacToe from "./TicTacToe";
-import {
-  Window,
-  MessageList,
-  MessageInput,
-  reactionHandlerWarning,
-} from "stream-chat-react";
+import { Window, MessageList, MessageInput } from "stream-chat-react";
 
 function Game({ channel, opponentName, setChannel }) {
   const [playersJoined, setPlayersJoined] = useState(
@@ -40,10 +35,14 @@ function Game({ channel, opponentName, setChannel }) {
         />
         <MessageInput noFiles />
       </Window>
-      <button onClick={async() => {
+      <button
+        onClick={async () => {
           await channel.stopWatching();
           setChannel(null);
-      }}>Leave Game</button>
+        }}
+      >
+        Leave Game
+      </button>
     </div>
   );
 }

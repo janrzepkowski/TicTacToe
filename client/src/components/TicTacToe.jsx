@@ -1,23 +1,21 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Board from "./Board";
 import Result from "./Result";
-import State from "./GameState";
+import GameState from "./GameState";
 import Reset from "./Reset";
 import Cookies from "universal-cookie";
+import { useChatContext } from "stream-chat-react";
 
 const PLAYER_X = "X";
 const PLAYER_O = "O";
 
 const WINNING_COMBINATIONS = [
-  // Rows
   { combo: [0, 1, 2], class: "strike-row-1" },
   { combo: [3, 4, 5], class: "strike-row-2" },
   { combo: [6, 7, 8], class: "strike-row-3" },
-  // Columns
   { combo: [0, 3, 6], class: "strike-column-1" },
   { combo: [1, 4, 7], class: "strike-column-2" },
   { combo: [2, 5, 8], class: "strike-column-3" },
-  // Diagonals
   { combo: [0, 4, 8], class: "strike-diagonal-1" },
   { combo: [2, 4, 6], class: "strike-diagonal-2" },
 ];
@@ -27,15 +25,15 @@ function checkWinner(tiles, setStrikeClass) {
     const [a, b, c] = combo;
     if (tiles[a] && tiles[a] === tiles[b] && tiles[a] === tiles[c]) {
       setStrikeClass(strikeClass);
-      return tiles[a] === PLAYER_X ? State.xWin : State.oWin;
+      return tiles[a] === PLAYER_X ? GameState.xWin : GameState.oWin;
     }
   }
 
   if (tiles.every((tile) => tile !== null)) {
-    return State.draw;
+    return GameState.draw;
   }
 
-  return State.inProgress;
+  return GameState.inProgress;
 }
 
 function TicTacToe({ channel }) {
@@ -44,7 +42,9 @@ function TicTacToe({ channel }) {
   const [tiles, setTiles] = useState(Array(9).fill(null));
   const [player, setPlayer] = useState(startingPlayer);
   const [strikeClass, setStrikeClass] = useState("");
-  const [gameState, setGameState] = useState(State.inProgress);
+  const [gameState, setGameState] = useState(GameState.inProgress);
+
+  const { client } = useChatContext();
 
   useEffect(() => {
     const result = checkWinner(tiles, setStrikeClass);
@@ -52,20 +52,45 @@ function TicTacToe({ channel }) {
   }, [tiles]);
 
   useEffect(() => {
-    const handleMessage = (event) => {
-      const { tiles, player, gameState, strikeClass } = event.message.data;
-      setTiles(tiles);
-      setPlayer(player);
-      setGameState(gameState);
-      setStrikeClass(strikeClass);
+    const handleEvent = (event) => {
+      const { type, data, user } = event;
+
+      if (type === "game-move" && user.id !== client.userID) {
+        const { clicked, player } = data;
+        const newTiles = [...tiles];
+        newTiles[clicked] = player;
+        setTiles(newTiles);
+        setPlayer(player === PLAYER_X ? PLAYER_O : PLAYER_X);
+      }
+
+      if (type === "reset") {
+        setTiles(Array(9).fill(null));
+        setStrikeClass("");
+        setGameState(GameState.inProgress);
+        setStartingPlayer(PLAYER_X);
+        setPlayer(PLAYER_X);
+      }
+
+      if (type === "game-over") {
+        setTiles(Array(9).fill(null));
+        setStrikeClass("");
+        setGameState(GameState.inProgress);
+        setStartingPlayer(PLAYER_X);
+        setPlayer(PLAYER_X);
+      }
     };
 
-    channel.on("message.new", handleMessage);
-    return () => channel.off("message.new", handleMessage);
-  }, [channel]);
+    channel.on(handleEvent);
+
+    return () => channel.off(handleEvent);
+  }, [channel, client.userID, tiles]);
 
   const handleTileClick = async (index) => {
-    if (tiles[index] !== null || gameState !== State.inProgress || !isMyTurn()) {
+    if (
+      tiles[index] !== null ||
+      gameState !== GameState.inProgress ||
+      !isMyTurn()
+    ) {
       return;
     }
 
@@ -79,36 +104,23 @@ function TicTacToe({ channel }) {
     const result = checkWinner(newTiles, setStrikeClass);
     setGameState(result);
 
-    await channel.sendMessage({
-      text: "update",
+    await channel.sendEvent({
+      type: "game-move",
       data: {
-        tiles: newTiles,
-        player: nextPlayer,
-        gameState: result,
-        strikeClass: result !== State.inProgress ? strikeClass : "",
+        clicked: index,
+        player: player,
       },
     });
   };
 
   const handleReset = async () => {
-    const newTiles = Array(9).fill(null);
-    const newPlayer = startingPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
+    await channel.sendEvent({ type: "reset" });
 
-    setTiles(newTiles);
+    setTiles(Array(9).fill(null));
     setStrikeClass("");
-    setGameState(State.inProgress);
-    setStartingPlayer(newPlayer);
-    setPlayer(newPlayer);
-
-    await channel.sendMessage({
-      text: "reset",
-      data: {
-        tiles: newTiles,
-        player: newPlayer,
-        gameState: State.inProgress,
-        strikeClass: "",
-      },
-    });
+    setGameState(GameState.inProgress);
+    setStartingPlayer(PLAYER_X);
+    setPlayer(PLAYER_X);
   };
 
   const isMyTurn = () => {
