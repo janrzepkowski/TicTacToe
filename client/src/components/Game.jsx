@@ -7,7 +7,7 @@ import {
   reactionHandlerWarning,
 } from "stream-chat-react";
 
-function Game({ channel, opponentName }) {
+function Game({ channel, opponentName, setChannel }) {
   const [playersJoined, setPlayersJoined] = useState(
     channel.state.watcher_count === 2
   );
@@ -40,6 +40,10 @@ function Game({ channel, opponentName }) {
         />
         <MessageInput noFiles />
       </Window>
+      <button onClick={async() => {
+          await channel.stopWatching();
+          setChannel(null);
+      }}>Leave Game</button>
     </div>
   );
 }
