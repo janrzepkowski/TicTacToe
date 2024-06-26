@@ -11,15 +11,21 @@ function Login({ setIsAuth }) {
     Axios.post("http://localhost:5174/login", {
       username,
       password,
-    }).then((res) => {
-      const { token, userID, firstName, lastName, username } = res.data;
-      cookies.set("token", token);
-      cookies.set("userID", userID);
-      cookies.set("firstName", firstName);
-      cookies.set("lastName", lastName);
-      cookies.set("username", username);
-      setIsAuth(true);
-    });
+    })
+      .then((res) => {
+        if (res.data.token) {
+          const { token, userID, firstName, lastName, username } = res.data;
+          cookies.set("token", token);
+          cookies.set("userID", userID);
+          cookies.set("firstName", firstName);
+          cookies.set("lastName", lastName);
+          cookies.set("username", username);
+          setIsAuth(true);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
