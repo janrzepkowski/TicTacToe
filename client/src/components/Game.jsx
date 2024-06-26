@@ -52,8 +52,12 @@ function Game({ channel, opponentName, setChannel }) {
   const { client } = useChatContext();
 
   useEffect(() => {
-    const handleUserWatchingStart = (e) => {
-      setPlayersJoined(e.watcher_count === 2);
+    const handleUserWatchingStart = async (e) => {
+      const watcherCount = e.watcher_count;
+      setPlayersJoined(watcherCount === 2);
+      if (watcherCount === 2) {
+        await channel.truncate();
+      }
     };
     channel.on("user.watching.start", handleUserWatchingStart);
     return () => {
