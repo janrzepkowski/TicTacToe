@@ -11,6 +11,9 @@ body {
   align-items: center;
   background-color: #23272f;
   color: #f6f7f9;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
 }
 
 h1 {
@@ -125,4 +128,66 @@ h1 {
 .reset-button:hover {
   background-color: #283541;
   color: #53c1de;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.auth-box {
+  background-color: #343a46;
+  padding: 40px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login,
+.signUp {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 50px;
+}
+
+.login label,
+.signUp label {
+  font-size: 1.7em;
+  margin-bottom: 15px;
+}
+
+.login input,
+.signUp input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #53c1de;
+  background-color: #283541;
+  color: #f6f7f9;
+  font-size: 1.3em;
+}
+
+.login button,
+.signUp button {
+  padding: 15px 30px;
+  border: 1px solid #53c1de;
+  border-radius: 8px;
+  background-color: #53c1de;
+  color: #f6f7f9;
+  cursor: pointer;
+  font-size: 1.3em;
+}
+
+.login button:hover,
+.signUp button:hover {
+  background-color: #41a4b8;
+  border: 1px solid #41a4b8;
 }

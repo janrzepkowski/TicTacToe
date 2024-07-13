@@ -50,10 +50,10 @@ function App() {
           <button onClick={logOut}> Log Out </button>
         </Chat>
       ) : (
-        <>
+        <div className="auth-container">
           <SignUp setIsAuth={setIsAuth} />
           <Login setIsAuth={setIsAuth} />
-        </>
+        </div>
       )}
     </div>
   );
