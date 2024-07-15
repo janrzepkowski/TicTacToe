@@ -1,3 +1,4 @@
+/* Główne ustawienia kontenera */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -130,6 +131,7 @@ h1 {
   color: #53c1de;
 }
 
+/* Stylowanie dla kontenerów autoryzacji */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -190,4 +192,78 @@ h1 {
 .signUp button:hover {
   background-color: #41a4b8;
   border: 1px solid #41a4b8;
+}
+
+.joingame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.joingame h4 {
+  font-size: 1.7em;
+  margin-bottom: 15px;
+}
+
+.joingame input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #53c1de;
+  background-color: #283541;
+  color: #f6f7f9;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.joingame button {
+  padding: 15px 30px;
+  border: 1px solid #53c1de;
+  border-radius: 8px;
+  background-color: #53c1de;
+  color: #f6f7f9;
+  cursor: pointer;
+  font-size: 1.3em;
+  margin: 10px 0;
+}
+
+.joingame button:hover {
+  background-color: #41a4b8;
+  border: 1px solid #41a4b8;
+}
+
+/* Stylowanie dla przycisku "Log Out" */
+.logout-button {
+  padding: 15px 30px;
+  border: 1px solid #53c1de;
+  border-radius: 8px;
+  background-color: #53c1de;
+  color: #f6f7f9;
+  cursor: pointer;
+  font-size: 1.3em;
+  margin: 20px 0;
+}
+
+.logout-button:hover {
+  background-color: #41a4b8;
+  border: 1px solid #41a4b8;
+}
+
+/* Dodatkowe ustawienia responsywności */
+@media (max-width: 600px) {
+  .auth-box,
+  .main-container {
+    width: 100%;
+    max-width: none;
+    padding: 20px;
+  }
+
+  .login,
+  .signUp {
+    width: 100%;
+    margin-right: 0;
+  }
 }

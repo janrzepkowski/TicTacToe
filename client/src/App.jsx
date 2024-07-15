@@ -47,7 +47,7 @@ function App() {
       {isAuth ? (
         <Chat client={client}>
           <JoinGame />
-          <button onClick={logOut}> Log Out </button>
+          <button onClick={logOut} className="logout-button"> Log Out </button>
         </Chat>
       ) : (
         <div className="auth-container">
