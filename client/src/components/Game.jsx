@@ -80,14 +80,7 @@ function Game({ channel, opponentName, setChannel }) {
         setTiles(newTiles);
         setPlayer(player === PLAYER_X ? PLAYER_O : PLAYER_X);
       }
-      if (type === "reset") {
-        setTiles(Array(9).fill(null));
-        setStrikeClass("");
-        setGameState(GameState.inProgress);
-        setStartingPlayer(PLAYER_X);
-        setPlayer(PLAYER_X);
-      }
-      if (type === "game-over") {
+      if (type === "reset" || "game-over") {
         setTiles(Array(9).fill(null));
         setStrikeClass("");
         setGameState(GameState.inProgress);
@@ -144,8 +137,14 @@ function Game({ channel, opponentName, setChannel }) {
   };
 
   if (!playersJoined) {
-    return <div>Waiting for {opponentName} to join...</div>;
+    return (
+      <div className="waitroom">
+        <div>Waiting for {opponentName} to join...</div>
+        <div className="dot-spin"></div>
+      </div>
+    );
   }
+  
 
   return (
     <div>
