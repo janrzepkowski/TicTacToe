@@ -154,26 +154,33 @@ function Game({ channel, opponentName, setChannel }) {
   }
 
   return (
-    <div>
+    <div className="game-container">
       <h1>Tic Tac Toe</h1>
-      <Board
-        player={player}
-        tiles={tiles}
-        onTileClick={handleTileClick}
-        strikeClass={strikeClass}
-      />
-      <Result gameState={gameState} />
-      <Reset gameState={gameState} onReset={handleReset} />
-      <Window>
-        <MessageList
-          disableDateSeparator
-          closeReactionSelectorOnClick
-          hideDeletedMessages
-          messageActions={["react"]}
-        />
-        <MessageInput noFiles />
-      </Window>
+      <div className="game-chat-section">
+        <div className="game-section">
+          <Board
+            player={player}
+            tiles={tiles}
+            onTileClick={handleTileClick}
+            strikeClass={strikeClass}
+          />
+          <Result gameState={gameState} />
+          <Reset gameState={gameState} onReset={handleReset} />
+        </div>
+        <div className="chat-section">
+          <Window>
+            <MessageList
+              disableDateSeparator
+              closeReactionSelectorOnClick
+              hideDeletedMessages
+              messageActions={["react"]}
+            />
+            <MessageInput noFiles />
+          </Window>
+        </div>
+      </div>
       <button
+        className="leave-button"
         onClick={async () => {
           await channel.stopWatching();
           setChannel(null);
