@@ -10,6 +10,7 @@ import {
   MessageList,
   MessageInput,
 } from "stream-chat-react";
+import "./Chat.css";
 
 const PLAYER_X = "X";
 const PLAYER_O = "O";
@@ -80,7 +81,14 @@ function Game({ channel, opponentName, setChannel }) {
         setTiles(newTiles);
         setPlayer(player === PLAYER_X ? PLAYER_O : PLAYER_X);
       }
-      if (type === "reset" || "game-over") {
+      if (type === "reset") {
+        setTiles(Array(9).fill(null));
+        setStrikeClass("");
+        setGameState(GameState.inProgress);
+        setStartingPlayer(PLAYER_X);
+        setPlayer(PLAYER_X);
+      }
+      if (type === "game-over") {
         setTiles(Array(9).fill(null));
         setStrikeClass("");
         setGameState(GameState.inProgress);
@@ -144,7 +152,6 @@ function Game({ channel, opponentName, setChannel }) {
       </div>
     );
   }
-  
 
   return (
     <div>
