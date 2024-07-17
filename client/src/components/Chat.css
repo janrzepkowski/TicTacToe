@@ -50,7 +50,7 @@
 .str-chat__list li {
   background-color: #283541;
   margin-top: 10px;
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 10px;
   text-align: left;
 }
@@ -93,16 +93,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%; /* Ensure the wrapper takes the full width */
+  width: 100%;
 }
 
 .str-chat__input-flat-wrapper textarea {
   resize: none;
-  width: 100%; /* Ensure textarea takes the full width of its container */
-  height: 90px;
+  width: 100%;
   border: 1px solid #53c1de;
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 10px;
+  padding: 18px;
   font-size: 1.3em;
   background-color: #283541;
   color: #f6f7f9;
@@ -159,10 +158,9 @@
 }
 
 .send-message-button {
-  width: 75%;
-  padding: 15px 30px;
+  padding: 15px;
   border: 1px solid #53c1de;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: #53c1de;
   color: #f6f7f9;
   cursor: pointer;
