@@ -9,7 +9,9 @@ function CustomInput() {
         <div className="str-chat__input-flat--textarea-wrapper">
           <ChatAutoComplete />
         </div>
-        <button onClick={handleSubmit}> Send Message</button>
+        <button className="send-message-button" onClick={handleSubmit}>
+          Send Message
+        </button>
       </div>
     </div>
   );
