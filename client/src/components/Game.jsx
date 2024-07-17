@@ -82,18 +82,10 @@ function Game({ channel, opponentName, setChannel }) {
         setPlayer(player === PLAYER_X ? PLAYER_O : PLAYER_X);
       }
       if (type === "reset") {
-        setTiles(Array(9).fill(null));
-        setStrikeClass("");
-        setGameState(GameState.inProgress);
-        setStartingPlayer(PLAYER_X);
-        setPlayer(PLAYER_X);
+        resetGame();
       }
       if (type === "game-over") {
-        setTiles(Array(9).fill(null));
-        setStrikeClass("");
-        setGameState(GameState.inProgress);
-        setStartingPlayer(PLAYER_X);
-        setPlayer(PLAYER_X);
+        resetGame();
       }
     };
     channel.on(handleEvent);
@@ -126,6 +118,10 @@ function Game({ channel, opponentName, setChannel }) {
 
   const handleReset = async () => {
     await channel.sendEvent({ type: "reset" });
+    resetGame();
+  };
+
+  const resetGame = () => {
     setTiles(Array(9).fill(null));
     setStrikeClass("");
     setGameState(GameState.inProgress);

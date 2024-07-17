@@ -155,7 +155,7 @@ h1 {
 
 .login label,
 .signUp label {
-  font-size: 2.0em;
+  font-size: 2em;
   margin-bottom: 15px;
 }
 
@@ -198,7 +198,7 @@ h1 {
 }
 
 .joingame div {
-  font-size: 2.0em;
+  font-size: 2em;
   margin-bottom: 15px;
 }
 
@@ -269,7 +269,7 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 2.0em;
+  font-size: 2em;
 }
 
 .dot-spin {
