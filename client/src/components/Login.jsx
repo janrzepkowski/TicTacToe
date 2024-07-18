@@ -8,7 +8,7 @@ function Login({ setIsAuth }) {
   const cookies = new Cookies();
 
   const login = () => {
-    Axios.post("http://localhost:5174/login", {
+    Axios.post("https://tictactoe-y8j3.onrender.com/login", {
       username,
       password,
     })
