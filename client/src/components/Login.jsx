@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
 
-function Login({ setIsAuth }) {
+function Login({ setIsAuth, setIsLoading }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const cookies = new Cookies();
 
   const login = () => {
+    setIsLoading(true);
     Axios.post("https://tictactoe-y8j3.onrender.com/login", {
       username,
       password,
@@ -23,8 +24,8 @@ function Login({ setIsAuth }) {
           setIsAuth(true);
         }
       })
-      .catch((err) => {
-        console.error(err);
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 

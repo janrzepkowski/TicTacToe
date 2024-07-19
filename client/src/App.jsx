@@ -13,6 +13,7 @@ function App() {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const [isAuth, setIsAuth] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const logOut = () => {
     cookies.remove("token");
@@ -23,6 +24,7 @@ function App() {
     cookies.remove("hashedPassword");
     client.disconnectUser();
     setIsAuth(false);
+    setIsLoading(false);
   };
 
   if (token) {
@@ -47,12 +49,20 @@ function App() {
       {isAuth ? (
         <Chat client={client}>
           <JoinGame />
-          <button onClick={logOut} className="logout-button"> Log Out </button>
+          <button onClick={logOut} className="logout-button">
+            {" "}
+            Log Out{" "}
+          </button>
         </Chat>
+      ) : isLoading ? (
+        <div className="waitroom">
+          <div>Waiting for connection with the server...</div>
+          <div className="dot-spin"></div>
+        </div>
       ) : (
         <div className="auth-container">
-          <SignUp setIsAuth={setIsAuth} />
-          <Login setIsAuth={setIsAuth} />
+          <SignUp setIsAuth={setIsAuth} setIsLoading={setIsLoading} />
+          <Login setIsAuth={setIsAuth} setIsLoading={setIsLoading} />
         </div>
       )}
     </div>

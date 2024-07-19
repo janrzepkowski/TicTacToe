@@ -2,22 +2,27 @@ import React, { useState } from "react";
 import Axios from "axios";
 import Cookies from "universal-cookie";
 
-function SignUp({ setIsAuth }) {
+function SignUp({ setIsAuth, setIsLoading }) {
   const cookies = new Cookies();
   const [user, setUser] = useState(null);
 
   const signUp = () => {
-    Axios.post("https://tictactoe-y8j3.onrender.com/signUp", user).then((res) => {
-      const { token, userID, firstName, lastName, username, hashedPassword } =
-        res.data;
-      cookies.set("token", token);
-      cookies.set("userID", userID);
-      cookies.set("firstName", firstName);
-      cookies.set("lastName", lastName);
-      cookies.set("username", username);
-      cookies.set("hashedPassword", hashedPassword);
-      setIsAuth(true);
-    });
+    setIsLoading(true);
+    Axios.post("https://tictactoe-y8j3.onrender.com/signUp", user)
+      .then((res) => {
+        const { token, userID, firstName, lastName, username, hashedPassword } =
+          res.data;
+        cookies.set("token", token);
+        cookies.set("userID", userID);
+        cookies.set("firstName", firstName);
+        cookies.set("lastName", lastName);
+        cookies.set("username", username);
+        cookies.set("hashedPassword", hashedPassword);
+        setIsAuth(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
