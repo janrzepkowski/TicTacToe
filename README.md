@@ -47,3 +47,19 @@ cd TicTacToe/server
 ```sh
 npm install
 ```
+
+## Running Application
+
+1. Navigate to "server" directory and start the server:
+
+```sh
+npm start
+```
+
+2. Navigate to "client" directory and start the server:
+
+```sh
+npm run dev
+```
+
+3. The Tic Tac Toe application will be available at `http://localhost:5173` in your web browser.
